@@ -1,0 +1,29 @@
+<html lan="en">
+<head>
+    <title>My App</title>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
+</head>
+    <body>
+        <div class="container">
+        <h1><%= title %></h1>
+            All Actors
+      <ul>
+        <% for(var i=0;i<items.data.length;i++) {%>
+          <li><h4>Name:<%= items.data[i].name %> Born: <%= items.data[i].born %></h4></li>
+           <% } %>
+        </ul>
+        <form action="/add" method="post">
+            <input type="text" name="newItem">
+            <input type="submit">
+
+        </form>
+            </div>
+    </body>
+    <script src="jquery/dist/jquery.js"></script>
+    <script src="bootstrap/dist/js/bootstrap.min.js">
+    </script>
+    <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+            
+
+
+</html>
