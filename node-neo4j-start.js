@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
     extended: true
 }));
 app.use(express.static(path.join(__dirname,'bower_components')));
-
+app.use('/bower_components',express.static(__dirname + '/bower_components'));
 
 //Custom Queries
 var getAllNodes = ['START n=node(*) RETURN n '];
@@ -69,18 +69,26 @@ app.get('/api/node-neo4j/node/:id', function(req, res) {
             console.log("Response Code: " + HTTPStatus.NOT_FOUND);
             res.status(HTTPStatus.NOT_FOUND).send('Node ' + id + ' NOT FOUND');
         } else {
+            
+            res.render('detail',{
+                
+                 title:'My App',
+                 items:node //hav passed database result to the page nd trying to print it on index page views/index.ejs
+                     //so tht index page ll show all a stin li
+          });
             console.log("Response Code: " + HTTPStatus.OK + ", Data: " + node);
 
             var date2 = moment().millisecond();
             console.log("Date2 : " + date2);
             console.log("Request time:- " + (date2 - date1));
 
-            res.status(HTTPStatus.OK).send(node);
+            
 
         }
     });
 });
-/*
+
+/* return all nodes */
 app.get('/',function(req,res){
    node_neo4j_db.cypherQuery("MATCH  p=(a)-->(m) RETURN DISTINCT a;", function(err, nodes) {
         if (err) {
@@ -88,7 +96,7 @@ app.get('/',function(req,res){
             res.status(HTTPStatus.INTERNAL_SERVER_ERROR).send('Internal Server Error');
         }
        else{
-           console.log(nodes);
+//           console.log(nodes);
          res.render('index',{
          title:'My App',
          items:nodes //hav passed database result to the page nd trying to print it on index page views/index.ejs
@@ -96,8 +104,9 @@ app.get('/',function(req,res){
           });
        }
     });
-});*/
+});
 
+/*
 app.get('/',function(req,res){
    node_neo4j_db.cypherQuery("MATCH  p=(a)-->(m) RETURN DISTINCT a;", function(err, nodes) {
         if (err) {
@@ -109,6 +118,58 @@ app.get('/',function(req,res){
          res.send(nodes);
        }
     });
+});
+*/
+
+app.get('/create',function(req,res){
+    
+    var name = req.params.name;
+   
+    
+         node_neo4j_db.insertNode({name: 'rohan',sex: 'male' },function(err, node){
+             if (err) {
+                        console.log("Response Code: " + HTTPStatus.INTERNAL_SERVER_ERROR);
+                        res.status(HTTPStatus.INTERNAL_SERVER_ERROR).send('Internal Server Error');
+                    }
+            // Output node properties.
+            console.log(node.data);
+
+            // Output node id.
+            console.log(node._id);
+             res.send(node.name);
+        });
+});
+
+
+
+/**
+Description: Delete a single Node
+*/
+app.get('/delete/:id', function(req, res) {
+
+    var id = req.params.id;
+    
+    console.log("Request to Delete Node, Params : id= " + id);
+    
+    node_neo4j_db.deleteNode(id, function(err, node) {
+        if (err) {
+            console.log("Response Code: " + HTTPStatus.INTERNAL_SERVER_ERROR);
+            res.send('Internal Server Error');
+            
+        }
+        if (node === true) {
+            console.log("Response Code: " + HTTPStatus.OK);
+            res.send("Node " + id + " successfully deleted!!!");
+            
+            
+            
+        } else {
+            console.log("Response Code: " + HTTPStatus.NOT_FOUND);
+            res.send('NOT FOUND');
+           
+        }
+    });
+    return res.redirect('/');
 });
 
 
@@ -154,28 +215,6 @@ app.put('/api/node-neo4j/node/:id', function(req, res) {
         if (node === true) {
             console.log("Response Code: " + HTTPStatus.OK + ", Node: " + node._id + "Updated Successfully");
             res.status(HTTPStatus.OK).send("Node " + id + "Successfully Updated!!!");
-        } else {
-            console.log("Response Code: " + HTTPStatus.NOT_FOUND);
-            res.status(HTTPStatus.NOT_FOUND).send('NOT FOUND');
-        }
-    });
-});
-
-/**
-Description: Delete a single Node
-*/
-app.delete('/api/node-neo4j/node/:id', function(req, res) {
-
-    var id = req.params.id;
-    console.log("Request to Delete Node, Params : id= " + id);
-    node_neo4j_db.deleteNode(id, function(err, node) {
-        if (err) {
-            console.log("Response Code: " + HTTPStatus.INTERNAL_SERVER_ERROR);
-            res.status(HTTPStatus.INTERNAL_SERVER_ERROR).send('Internal Server Error');
-        }
-        if (node === true) {
-            console.log("Response Code: " + HTTPStatus.OK);
-            res.status(HTTPStatus.OK).send("Node " + id + " successfully deleted!!!");
         } else {
             console.log("Response Code: " + HTTPStatus.NOT_FOUND);
             res.status(HTTPStatus.NOT_FOUND).send('NOT FOUND');

@@ -1,0 +1,40 @@
+<html lan="en">
+<head>
+    <title>My App</title>
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+</head>
+    <body>
+        <div class="container">
+        <h1><%= title %></h1> <a href="/">Back to home</a>
+          
+    <table class="table">
+    
+       
+          <tr>
+          
+                 <td>Id <%= items._id %></td>
+                <td>Name:<%= items.name %> </td> 
+                <td>Born: <%= items.born %></h4></td>
+                <td><a href="/delete/<%= items._id %>">delete</a>|<a href="">update</a></td>
+          
+          
+           </tr>   
+          
+        
+            
+    </table> 
+            
+            
+            
+   
+       
+            </div>
+    </body>
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js">
+    </script>
+    <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+            
+
+
+</html>

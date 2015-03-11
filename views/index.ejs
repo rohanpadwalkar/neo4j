@@ -7,11 +7,26 @@
         <div class="container">
         <h1><%= title %></h1>
             All Actors
-      <ul>
+    <table class="table">
+    
         <% for(var i=0;i<items.data.length;i++) {%>
-          <li><h4>Name:<%= items.data[i].name %> Born: <%= items.data[i].born %></h4></li>
-           <% } %>
-        </ul>
+          <tr>
+          
+                <td><a href="/api/node-neo4j/node/<%= items.data[i]._id %>" >Id <%= items.data[i]._id %></a> </td>
+                <td>Name:<%= items.data[i].name %> </td> 
+                <td>Born: <%= items.data[i].born %></h4></td>
+                <td><a href="/delete/<%= items.data[i]._id %>">delete</a>|<a href="">update</a></td>
+          
+          
+           </tr>   
+          <% } %>
+        
+            
+    </table> 
+            
+            
+            
+   
         <form action="/add" method="post">
             <input type="text" name="newItem">
             <input type="submit">
